@@ -1,7 +1,7 @@
 const jsonServer = require('json-server');
 var _ = require('lodash');
 const server = jsonServer.create();
-const router = jsonServer.router('database.json');
+const router = jsonServer.router('./tmp/database.json');
 const middlewares = jsonServer.defaults();
 
 // Use default middlewares
