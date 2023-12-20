@@ -3,9 +3,11 @@ var _ = require('lodash');
 const server = jsonServer.create();
 const router = jsonServer.router('./tmp/database.json');
 const middlewares = jsonServer.defaults();
+const bodyParser = require('body-parser');
 
 // Use default middlewares
 server.use(middlewares);
+server.use(bodyParser.json());
 
 // Custom route to return posts by category and author
 server.get('/questions/ids', (req, res) => {
@@ -44,6 +46,18 @@ server.put('/gradetests/:id', (req, res) => {
     res.status(200).jsonp(test);
 });
 
+// Update userData
+server.post('/usersData/:userId', (req, res) => {
+    const {userId} = req.params
+    let userData = router.db.get('usersData').find({id: userId}).value()
+    let {id, usedQuestions } = req.body;
+
+    userData.usedQuestions = usedQuestions;
+
+    router.db.get('usersData').find({id: userId}).assign(userData).value();
+
+    res.status(200).jsonp(userData)
+})
 // Use default router
 server.use(router);
 
